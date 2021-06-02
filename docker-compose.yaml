@@ -1,0 +1,17 @@
+version: '3.4'
+
+volumes:
+  input_data: {}
+
+services: 
+  # 0-data-preparation-facilities:
+  #   build: 0-data-preparation/facilities/.
+  #   command: ['./run.sh', 'data']
+  #   volumes:
+  #     - input_data:/home/workdir/data
+
+  0-data-preparation-network:
+    build: 0-data-preparation/network/.
+    command: ['./run.sh', 'data']
+    volumes:
+      - input_data:/home/workdir/data

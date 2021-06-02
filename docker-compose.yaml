@@ -2,6 +2,7 @@ version: '3.4'
 
 volumes:
   input_data: {}
+  activities_output: {}
 
 services: 
   # 0-data-preparation-facilities:
@@ -16,8 +17,15 @@ services:
   #   volumes:
   #     - input_data:/home/workdir/data
 
-  0-data-preparation-activity-model:
-    build: 0-data-preparation/activity-model/
-    command: ['./run.sh', 'data']
+  # 0-data-preparation-activity-model:
+  #   build: 0-data-preparation/activity-model/
+  #   command: ['./run.sh', 'data']
+  #   volumes:
+  #     - input_data:/home/workdir/data
+
+  1-simulation-activity-model:
+    build: 1-simulation/activity-model/
+    command: ['./run.sh', 'data/activity_model/base_input_data', 'results/sim2', '1000', '1', '1']
     volumes:
       - input_data:/home/workdir/data
+      - activities_output:/home/workdir/results

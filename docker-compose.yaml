@@ -10,8 +10,14 @@ services:
   #   volumes:
   #     - input_data:/home/workdir/data
 
-  0-data-preparation-network:
-    build: 0-data-preparation/network/.
+  # 0-data-preparation-network:
+  #   build: 0-data-preparation/network/.
+  #   command: ['./run.sh', 'data']
+  #   volumes:
+  #     - input_data:/home/workdir/data
+
+  0-data-preparation-activity-model:
+    build: 0-data-preparation/activity-model/
     command: ['./run.sh', 'data']
     volumes:
       - input_data:/home/workdir/data

@@ -1,4 +1,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-localVolumeInputDataPath: /input-data/
+localVolumeInputDataPath: /local-volumes/input-data/
+
+dataPreparation: true

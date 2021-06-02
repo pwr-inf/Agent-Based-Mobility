@@ -1,23 +1,37 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: 0-data-preparation-activity-model
+  name: 0-data-preparation
+  # annotations:
+  #   "helm.sh/hook": pre-install
 spec:
   template:
     spec:
+      {{- if .Values.dataPreparation }}
+      initContainers:
+        - name: 0-data-preparation-activity-model
+          image: kornelro/abm-0-data-preparation-activity-model
+          command: ["./run.sh", "data"]
+          volumeMounts:
+          - mountPath: /home/workdir/data
+            name: input-data-pv
+        - name: 0-data-preparation-facilities
+          image: kornelro/abm-0-data-preparation-facilities
+          command: ["./run.sh", "data"]
+          volumeMounts:
+          - mountPath: /home/workdir/data
+            name: input-data-pv
+        - name: 0-data-preparation-network
+          image: kornelro/abm-0-data-preparation-network
+          command: ["./run.sh", "data"]
+          volumeMounts:
+          - mountPath: /home/workdir/data
+            name: input-data-pv
+      {{- end }}
       containers:
-      - name: 0-data-preparation-activity-model
-        image: kornelro/abm-0-data-preparation-activity-model
-        command: ["./run.sh", "data"]
-        volumeMounts:
-        - mountPath: /home/workdir/data
-          name: input-data-pv
-      # - name: 0-data-preparation-facilities
-      #   image: kornelro/abm-0-data-preparation-facilities
-      #   command: ["./run.sh", "data"]
-      #   volumeMounts:
-      #   - mountPath: /home/workdir/data
-      #     name: input-data-pv
+        - name: 0-data-preparation-end
+          image: busybox
+          command: ["echo", "Done!"]
       volumes:
       - name: input-data-pv
         persistentVolumeClaim:

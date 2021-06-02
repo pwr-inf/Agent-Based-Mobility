@@ -8,6 +8,7 @@ mkdir $DATA_PATH/raw
 mkdir $DATA_PATH/interim
 mkdir $DATA_PATH/processed
 mkdir $DATA_PATH/processed/shp
+mkdir $DATA_PATH/vis
 mkdir $DATA_PATH/vis/qgis_buildings_tags
 mkdir $DATA_PATH/vis/qgis_buildings_filtered_by_area_tags
 mkdir $DATA_PATH/vis/qgis_processed_buildings_tags

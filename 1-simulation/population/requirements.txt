@@ -1,0 +1,4 @@
+tqdm==4.60.0
+pandas==1.2.3
+pandarallel==1.5.2
+matsim-tools==0.0.10

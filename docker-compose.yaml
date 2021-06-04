@@ -2,7 +2,8 @@ version: '3.4'
 
 volumes:
   input_data: {}
-  activities_output: {}
+  populations: {}
+  scenarios: {}
 
 services: 
   # 0-data-preparation-facilities:
@@ -23,9 +24,23 @@ services:
   #   volumes:
   #     - input_data:/home/workdir/data
 
-  1-simulation-activity-model:
-    build: 1-simulation/activity-model/
-    command: ['./run.sh', 'data/activity_model/base_input_data', 'results/sim2', '1000', '1', '1']
+  # 1-simulation-activity-model:
+  #   build: 1-simulation/activity-model/
+  #   command: ['./run.sh', 'data/activity_model/base_input_data', 'results/sim1', '1000', '1', '1']
+  #   volumes:
+  #     - input_data:/home/workdir/data
+  #     - populations:/home/workdir/results
+
+  1-simulation-population:
+    build: 1-simulation/population/
+    command: ['./run.sh', 'data', 'populations', 'sim1']
     volumes:
       - input_data:/home/workdir/data
-      - activities_output:/home/workdir/results
+      -  populations:/home/workdir/populations
+
+  # 1-simulation-traffic-model:
+  #   build: 1-simulation/traffic-model/
+  #   command: ['./run.sh', 'data/activity_model/base_input_data', 'results/sim2', '1000', '1', '1']
+  #   volumes:
+  #     - input_data:/home/workdir/data
+  #     - activities_output:/home/workdir/results

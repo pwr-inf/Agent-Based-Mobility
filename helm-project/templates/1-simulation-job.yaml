@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: 1-simulation
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: 1-simulation-activity-model
+          image: {{ .Values.dockerContainers.simulationActivityModel }}
+          command: [
+            './run.sh', 'data/activity_model/base_input_data',
+            'results/sim2', '{{ .Values.simulation.populationSize }}',
+            '1', '1'
+          ]
+          volumeMounts:
+          - mountPath: /home/workdir/data
+            name: input-data-pv
+          - mountPath: /home/workdir/results
+            name: populations-pv
+        - name: 1-simulation-population
+          image: {{ .Values.dockerContainers.simulationPopulation }}
+          command: ['./run.sh', 'data', 'populations', 'sim2']
+          volumeMounts:
+          - mountPath: /home/workdir/data
+            name: input-data-pv
+          - mountPath: /home/workdir/populations
+            name: populations-pv
+      containers:
+        - name: 1-simulation-traffic-model
+          image: {{ .Values.dockerContainers.simulationTrafficModel }}
+          command: ['./run.sh', 'data', 'populations', 'scenarios', 'sim2']
+          volumeMounts:
+          - mountPath: /home/workdir/data
+            name: input-data-pv
+          - mountPath: /home/workdir/populations
+            name: populations-pv
+          - mountPath: /home/workdir/scenarios
+            name: scenarios-pv
+      volumes:
+      - name: input-data-pv
+        persistentVolumeClaim:
+          claimName: input-data-pvc
+      - name: populations-pv
+        persistentVolumeClaim:
+          claimName: populations-pvc
+      - name: scenarios-pv
+        persistentVolumeClaim:
+          claimName: scenarios-pvc
+      restartPolicy: Never
+  backoffLimit: 4

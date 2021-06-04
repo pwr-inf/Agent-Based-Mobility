@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: 0-data-preparation-activity-model
+  name: 0-data-preparation-facilities
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-delete-policy": hook-succeeded
@@ -10,8 +10,8 @@ spec:
   template:
     spec:
       containers:
-        - name: 0-data-preparation-activity-model
-          image: {{ .Values.dockerContainers.dataPreparationActivityModel }}
+        - name: 0-data-preparation-facilities
+          image: {{ .Values.dockerContainers.dataPreparationFacilities }}
           command: ["./run.sh", "data"]
           volumeMounts:
           - mountPath: /home/workdir/data

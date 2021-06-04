@@ -9,5 +9,5 @@ mkdir $DATA_PATH/processed
 mkdir $DATA_PATH/processing_logs
 mkdir $DATA_PATH/raw
 
-# ./bash_scripts/download_data.sh $DATA_PATH
+./bash_scripts/download_data.sh $DATA_PATH
 ./bash_scripts/process_data.sh $DATA_PATH

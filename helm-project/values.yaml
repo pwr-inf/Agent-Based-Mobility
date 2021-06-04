@@ -1,6 +1,19 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-localVolumeInputDataPath: /local-volumes/input-data/
+localVolumes:
+  inputDataPath: /local-volumes/input-data/
+  populationsPath: /local-volumes/populations/
+  scenariosPath: /local-volumes/scenarios/
 
-dataPreparation: true
+dockerContainers:
+  dataPreparationActivityModel: kornelro/abm-0-data-preparation-activity-model
+  dataPreparationFacilities: kornelro/abm-0-data-preparation-facilities
+  dataPreparationNetwork: kornelro/abm-0-data-preparation-network
+  simulationActivityModel: kornelro/abm-1-simulation-activity-model
+  simulationPopulation: kornelro/abm-1-simulation-population
+  simulationTrafficModel: kornelro/abm-1-simulation-traffic-model
+
+simulation:
+  dataPreparation: false
+  populationSize: '100'

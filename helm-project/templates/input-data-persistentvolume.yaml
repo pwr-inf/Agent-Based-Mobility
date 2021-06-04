@@ -1,3 +1,5 @@
+{{- $mypvc := (lookup "v1" "PersistentVolume" .Release.Namespace (printf "input-data-pv")) }}
+{{- if not $mypvc }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -5,6 +7,9 @@ metadata:
   labels:
     name: input-data-pv
     type: local
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-5"
 spec:
   storageClassName: manual
   capacity:
@@ -12,4 +17,5 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: {{ .Values.localVolumeInputDataPath }}
+    path: {{ .Values.localVolumes.inputDataPath }}
+{{- end -}}

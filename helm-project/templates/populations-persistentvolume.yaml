@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: populations-pv
+  labels:
+    name: populations-pv
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 16Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.localVolumes.populationsPath }}

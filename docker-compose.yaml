@@ -36,7 +36,7 @@ services:
   #   command: ['./run.sh', 'data', 'populations', 'sim1']
   #   volumes:
   #     - input_data:/home/workdir/data
-  #     -  populations:/home/workdir/populations
+  #     - populations:/home/workdir/populations
 
   1-simulation-traffic-model:
     build: 1-simulation/traffic-model/

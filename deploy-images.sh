@@ -23,3 +23,7 @@ docker push $HOST/abm-1-simulation-population:latest
 docker build -t abm-1-simulation-traffic-model 1-simulation/traffic-model/.
 docker tag abm-1-simulation-traffic-model $HOST/abm-1-simulation-traffic-model:latest
 docker push $HOST/abm-1-simulation-traffic-model:latest
+
+docker build -t abm-2-post-processing 2-post-processing/.
+docker tag abm-2-post-processing $HOST/abm-2-post-processing:latest
+docker push $HOST/abm-2-post-processing:latest

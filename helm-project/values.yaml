@@ -13,7 +13,14 @@ dockerContainers:
   simulationActivityModel: kornelro/abm-1-simulation-activity-model
   simulationPopulation: kornelro/abm-1-simulation-population
   simulationTrafficModel: kornelro/abm-1-simulation-traffic-model
+  postProcessing: kornelro/abm-2-post-processing
+
+dataPreparation: false
 
 simulation:
-  dataPreparation: false
   populationSize: '100'
+  simulatorsInstances: 2
+  simulationsNumberPerInstance: 2
+
+postProcessing:
+  hexSize: '9'

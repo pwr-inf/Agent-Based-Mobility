@@ -38,10 +38,16 @@ services:
   #     - input_data:/home/workdir/data
   #     - populations:/home/workdir/populations
 
-  1-simulation-traffic-model:
-    build: 1-simulation/traffic-model/
-    command: ['./run.sh', 'data', 'populations', 'scenarios', 'sim1']
+  # 1-simulation-traffic-model:
+  #   build: 1-simulation/traffic-model/
+  #   command: ['./run.sh', 'data', 'populations', 'scenarios', 'sim1']
+  #   volumes:
+  #     - input_data:/home/workdir/data
+  #     - populations:/home/workdir/populations
+  #     - scenarios:/home/workdir/scenarios
+
+  2-post-processing:
+    build: 2-post-processing/
+    command: ['./run.sh', 'data', 'sim1', '9']
     volumes:
-      - input_data:/home/workdir/data
-      - populations:/home/workdir/populations
-      - scenarios:/home/workdir/scenarios
+      - scenarios:/home/workdir/data

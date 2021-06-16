@@ -8,9 +8,9 @@ if __name__ == "__main__":
     input_dir = data_path = sys.argv[1]
     output_dir = data_path = sys.argv[2]
 
-    kbr_file_r1 = 'Etap V - 2_Pomiary natezenia ruchu drogowego_ring 1.xlsx'
-    kbr_file_r2 = 'Etap V - 2_Pomiary natezenia ruchu drogowego_ring 2.xlsx'
-    kbr_file_r3 = 'Etap V - 2_Pomiary natezenia ruchu drogowego_ring 3.xlsx'
+    kbr_file_r1 = 'Etap V - 2_Pomiary nat®Ąenia ruchu drogowego_ring 1.xlsx'
+    kbr_file_r2 = 'Etap V - 2_Pomiary nat®Ąenia ruchu drogowego_ring 2.xlsx'
+    kbr_file_r3 = 'Etap V - 2_Pomiary nat®Ąenia ruchu drogowego_ring 3.xlsx'
 
     file_path_r1 = os.path.join(input_dir, kbr_file_r1)
     file_path_r2 = os.path.join(input_dir, kbr_file_r2)

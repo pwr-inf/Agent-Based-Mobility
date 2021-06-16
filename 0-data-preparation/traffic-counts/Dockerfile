@@ -16,5 +16,7 @@ RUN mkdir python_scripts
 COPY python_scripts python_scripts
 COPY run.sh .
 RUN chmod +rx run.sh
+RUN chmod +rx bash_scripts/download_data.sh
+RUN chmod +rx bash_scripts/process_data.sh
 
 RUN mkdir data

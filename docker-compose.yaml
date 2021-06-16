@@ -24,6 +24,12 @@ services:
   #   volumes:
   #     - input_data:/home/workdir/data
 
+  0-data-preparation-traffic-counts:
+    build: 0-data-preparation/traffic-counts/.
+    command: ['./run.sh', 'data']
+    volumes:
+      - input_data:/home/workdir/data
+
   # 1-simulation-activity-model:
   #   build: 1-simulation/activity-model/
   #   command: ['./run.sh', 'data/activity_model/base_input_data', 'results/sim1', '1000', '1', '1']
@@ -46,8 +52,8 @@ services:
   #     - populations:/home/workdir/populations
   #     - scenarios:/home/workdir/scenarios
 
-  2-post-processing:
-    build: 2-post-processing/
-    command: ['./run.sh', 'data', 'sim1', '9']
-    volumes:
-      - scenarios:/home/workdir/data
+  # 2-post-processing:
+  #   build: 2-post-processing/
+  #   command: ['./run.sh', 'data', 'sim1', '9']
+  #   volumes:
+  #     - scenarios:/home/workdir/data

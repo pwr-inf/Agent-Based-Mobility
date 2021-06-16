@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+local-volumes
+abm_new_venv
+.vscode

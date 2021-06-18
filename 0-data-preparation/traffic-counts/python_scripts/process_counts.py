@@ -64,6 +64,9 @@ if __name__ == "__main__":
             'n_cars', 'n_buses', 'n_bicycles'
         ]
         df = df[chosen_cols]
+        df = df.groupby(
+            by=['id', 'street', 'hour']
+        ).sum().reset_index()
         
         out_file_name = 'ring_' + file_path.split(' ')[-1].replace('xlsx', 'csv')
         df.to_csv(os.path.join(output_dir, out_file_name))

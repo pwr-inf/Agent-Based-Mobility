@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
         # extract id and street name from 'Przekrój pomiarowy' column
         df['id'] = df['Przekrój pomiarowy'].apply(
-        lambda x: x.split(' ')[0].strip()
+            lambda x: x.split(' ')[0].strip()
         )
         df['street'] = df['Przekrój pomiarowy'].apply(
             lambda x: x.split('-')[1].strip()
@@ -67,7 +67,7 @@ if __name__ == "__main__":
         df = df.groupby(
             by=['id', 'street', 'hour']
         ).sum().reset_index()
-        
+
         out_file_name = 'ring_' + file_path.split(' ')[-1].replace('xlsx', 'csv')
         df.to_csv(os.path.join(output_dir, out_file_name))
         # dfs.append(df.reset_index(drop=True))

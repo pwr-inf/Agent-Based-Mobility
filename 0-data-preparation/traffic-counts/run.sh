@@ -1,14 +1,15 @@
 #!/bin/bash
 
 DATA_PATH=$1
-DATA_PATH=$DATA_PATH/traffic_counts
+COUNTS_POINTS_RADIUS=$2
 
-mkdir $DATA_PATH
-mkdir $DATA_PATH/raw
-mkdir $DATA_PATH/interim
-mkdir $DATA_PATH/processed
+mkdir $DATA_PATH/traffic_counts
+mkdir $DATA_PATH/traffic_counts/raw
+mkdir $DATA_PATH/traffic_counts/interim
+mkdir $DATA_PATH/traffic_counts/processed
 
-echo "Downloading KBR traffic counts..."
-./bash_scripts/download_data.sh $DATA_PATH/raw/kbr_traffic_counts.zip
+./bash_scripts/download_data.sh $DATA_PATH/traffic_counts/raw/kbr_traffic_counts.zip
 
-./bash_scripts/process_data.sh $DATA_PATH
+./bash_scripts/process_data.sh $DATA_PATH/traffic_counts
+
+./bash_scripts/find_links.sh $DATA_PATH $COUNTS_POINTS_RADIUS

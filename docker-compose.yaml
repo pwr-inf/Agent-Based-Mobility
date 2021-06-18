@@ -26,7 +26,7 @@ services:
 
   0-data-preparation-traffic-counts:
     build: 0-data-preparation/traffic-counts/.
-    command: ['./run.sh', 'data']
+    command: ['./run.sh', 'data', '30']
     volumes:
       - input_data:/home/workdir/data
 

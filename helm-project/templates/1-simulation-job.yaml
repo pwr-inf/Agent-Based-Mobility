@@ -40,10 +40,12 @@ spec:
       containers:
         - name: 2-post-processing
           image: {{ .Values.dockerContainers.postProcessing }}
-          command: ['./run.sh', 'data', 'sim1', '{{ .Values.postProcessing.hexSize }}']
+          command: ['./run.sh', 'scenarios', 'sim1', '{{ .Values.postProcessing.hexSize }}', 'input_data']
           volumeMounts:
-          - mountPath: /home/workdir/data
+          - mountPath: /home/workdir/scenarios
             name: scenarios-pv
+          - mountPath: /home/workdir/input_data
+            name: input-data-pv
       volumes:
       - name: input-data-pv
         persistentVolumeClaim:

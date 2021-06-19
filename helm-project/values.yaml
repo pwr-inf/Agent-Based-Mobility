@@ -10,15 +10,16 @@ dockerContainers:
   dataPreparationActivityModel: kornelro/abm-0-data-preparation-activity-model
   dataPreparationFacilities: kornelro/abm-0-data-preparation-facilities
   dataPreparationNetwork: kornelro/abm-0-data-preparation-network
+  dataPreparationTrafficCounts: kornelro/abm-0-data-preparation-traffic-counts
   simulationActivityModel: kornelro/abm-1-simulation-activity-model
   simulationPopulation: kornelro/abm-1-simulation-population
   simulationTrafficModel: kornelro/abm-1-simulation-traffic-model
   postProcessing: kornelro/abm-2-post-processing
 
-dataPreparation: false
+dataPreparation: true
 
 simulation:
-  populationSize: '100'
+  populationSize: '1000'
   simulatorsInstances: 2
   simulationsNumberPerInstance: 2
 

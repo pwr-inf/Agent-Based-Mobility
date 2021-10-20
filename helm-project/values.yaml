@@ -16,12 +16,12 @@ dockerContainers:
   simulationTrafficModel: kornelro/abm-1-simulation-traffic-model
   postProcessing: kornelro/abm-2-post-processing
 
-dataPreparation: true
+dataPreparation: false
 
 simulation:
-  populationSize: '1000'
+  populationSize: '600000'
   simulatorsInstances: 2
-  simulationsNumberPerInstance: 2
+  simulationsNumberPerInstance: 10
 
 postProcessing:
   hexSize: '9'

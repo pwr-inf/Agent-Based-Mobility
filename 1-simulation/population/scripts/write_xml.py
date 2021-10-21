@@ -75,14 +75,14 @@ if __name__ == '__main__':
                     x=x,
                     y=y,
                     facility_id=building,
-                    attributes={'duration': activity_dur_time}
+                    max_dur=activity_dur_time
                 )
                 writer.add_leg(mode=row['transport_mode'])
 
             building = row['dest_building']
             (x, y) = facilities_coords[building]
             activity_type = row['dest_place_type']
-            activity_dur_time = row['dest_activity_dur_time']
+            activity_dur_time = row['dest_activity_dur_time_s']
             prev_agent_id = agent_id
 
         building = agents_homes_dict[prev_agent_id]

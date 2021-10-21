@@ -12,6 +12,10 @@ docker build -t abm-0-data-preparation-network 0-data-preparation/network/.
 docker tag abm-0-data-preparation-network $HOST/abm-0-data-preparation-network:latest
 docker push $HOST/abm-0-data-preparation-network:latest
 
+docker build -t abm-0-data-preparation-traffic-counts 0-data-preparation/traffic-counts/.
+docker tag abm-0-data-preparation-traffic-counts $HOST/abm-0-data-preparation-traffic-counts:latest
+docker push $HOST/abm-0-data-preparation-traffic-counts:latest
+
 docker build -t abm-1-simulation-activity-model 1-simulation/activity-model/.
 docker tag abm-1-simulation-activity-model $HOST/abm-1-simulation-activity-model:latest
 docker push $HOST/abm-1-simulation-activity-model:latest

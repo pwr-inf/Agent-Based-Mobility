@@ -17,4 +17,5 @@ COPY ./scripts/. .
 COPY ./run.sh .
 RUN chmod +rx ./run.sh
 
-RUN mkdir data
+RUN mkdir scenarios
+RUN mkdir input_data

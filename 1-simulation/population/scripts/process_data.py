@@ -5,7 +5,7 @@ from typing import Set
 import pandas as pd
 from pandarallel import pandarallel
 from tqdm import tqdm
-
+from collections import defaultdict
 
 def sample_building(
     df: pd.DataFrame,  # facilities
@@ -20,6 +20,72 @@ def sample_building(
         sample = df_filtered.sample(1).iloc[0]
 
     return sample['id']
+
+def match_driver_passenger(
+    agents: pd.DataFrame,
+    travels: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Maches dirvers and passengers
+    Returns updated travels dataframe - passenger destinations are included in driver day schedule.
+
+    Parameters: 
+        agents  : DataFrame
+        travels : DataFrame
+    
+    Returns:
+        travels : DataFrame
+
+    """
+    df_merged = pd.merge(travels, agents[["home_region", "home_building", "agent_id"]], on="agent_id", how="left")
+    df_merged["start_building"] = df_merged.groupby('agent_id')['dest_building'].shift()
+    df_merged["start_building"] = df_merged["start_building"].fillna(df_merged["home_building"])
+
+    df_drivers = df_merged[df_merged['transport_mode'] == 'car']
+    travels = df_merged[df_merged['transport_mode'] != 'car']
+    df_passengers = df_merged[df_merged['transport_mode'] == 'car_passenger']
+    drivers_map = defaultdict(list)
+    #dict key = (home_region, travel_start_time_hour)
+    for _, row in df_drivers.iterrows():
+        drivers_map[row['home_region'], row['travel_start_time'][0:2]].append(row.to_dict())
+    df_passengers = df_passengers.head(10)
+    for _, passenger in tqdm(df_passengers.iterrows(), total=df_passengers.shape[0]) :
+        key = (passenger['home_region'], passenger['travel_start_time'][0:2])
+        if key in drivers_map:
+            possible_drivers = drivers_map.get(key)
+            #drivers = [driver for driver in possible_drivers if driver['travel_start_time_s'] < passenger['travel_start_time_s']]
+            driver = None
+            if len(possible_drivers) is not 0:
+                driver = possible_drivers[0]
+                possible_drivers.remove(driver)
+                drivers_map[key] = possible_drivers
+
+            if driver is not None:
+                # driver start -> passenger start
+                ds_ps = driver
+                ds_ps['dest_region'] = passenger['start_region']
+                ds_ps['dest_building'] = passenger['start_building']
+                ds_ps['dest_place_type'] = 'stop'
+                travels = travels.append(ds_ps, ignore_index=True)
+
+                # passenger start -> passenger dest
+                ps_pd = passenger
+                ps_pd['agent_id'] = driver['agent_id']
+                ps_pd['dest_place_type'] = 'stop'
+                ps_pd['start_place_type'] = 'stop'
+                travels = travels.append(ps_pd, ignore_index=True)
+
+                # passenger dest -> driver dest
+                pd_dd = driver
+                pd_dd['start_region'] = passenger['dest_region']
+                pd_dd['start_building'] = passenger['dest_building']
+                pd_dd['start_place_type'] = 'stop'
+                travels = travels.append(ds_ps, ignore_index=True)
+    for value in tqdm(drivers_map.values()):
+        travels = travels.append(value)
+    #travels = travels.drop(["home_region", "home_building"])
+    return travels
+
 
 
 if __name__ == "__main__":
@@ -77,7 +143,7 @@ if __name__ == "__main__":
     agents.to_csv(out_agents_path, index=False)
 
     # travels
-    travels = pd.read_csv(in_travels_path, index_col=0)
+    # travels = pd.read_csv(in_travels_path, index_col=0)
     travels = travels.replace(config['travels_activities_mapping'])
     modes = config['travels_modes_mapping']
     travels['transport_mode'] = travels.progress_apply(

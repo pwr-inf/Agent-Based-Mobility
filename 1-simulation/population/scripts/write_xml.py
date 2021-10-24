@@ -32,6 +32,8 @@ if __name__ == '__main__':
         writer.start_population()
 
         prev_agent_id = -1
+        activity_type = None
+        activity_dur_time = None
 
         for row_id, row in tqdm(
             travels.sort_values(['agent_id', 'travel_start_time']).iterrows(),
@@ -59,18 +61,28 @@ if __name__ == '__main__':
                 writer.start_plan(selected=True)
                 building = agents_homes_dict[agent_id]
                 (x, y) = facilities_coords[building]
-
-            writer.add_activity(
-                type=row['start_place_type'],
-                x=x,
-                y=y,
-                facility_id=building,
-                end_time=row['travel_start_time_s']
-            )
-            writer.add_leg(mode=row['transport_mode'])
+                writer.add_activity(
+                    type='home',
+                    x=x,
+                    y=y,
+                    facility_id=building,
+                    end_time=row['travel_start_time_s']
+                )
+                writer.add_leg(mode=row['transport_mode'])
+            else:
+                writer.add_activity(
+                    type=activity_type,
+                    x=x,
+                    y=y,
+                    facility_id=building,
+                    max_dur=activity_dur_time
+                )
+                writer.add_leg(mode=row['transport_mode'])
 
             building = row['dest_building']
             (x, y) = facilities_coords[building]
+            activity_type = row['dest_place_type']
+            activity_dur_time = row['dest_activity_dur_time_s']
             prev_agent_id = agent_id
 
         building = agents_homes_dict[prev_agent_id]
@@ -83,5 +95,5 @@ if __name__ == '__main__':
         )
         writer.end_plan()
         writer.end_person()
-        
+
         writer.end_population()

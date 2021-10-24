@@ -44,8 +44,8 @@ if __name__ == "__main__":
     scenario_name = sys.argv[2]
 
     scenario_path = get_scenario_path(data_path, scenario_name)
-    vis_path = scenario_path+'/vis'
-    output_path = vis_path+'/custom'
+    vis_path = os.path.join(scenario_path, 'vis')
+    output_path = os.path.join(scenario_path, 'counts')
     try:
         os.mkdir(output_path)
     except FileExistsError:
@@ -80,6 +80,6 @@ if __name__ == "__main__":
 
     # save data
     network_counts.to_file(
-        output_path+'/network_counts.json',
+        os.path.join(output_path, 'network_counts.json'),
         driver="GeoJSON"
     )

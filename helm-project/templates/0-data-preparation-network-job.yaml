@@ -9,10 +9,17 @@ metadata:
 spec:
   template:
     spec:
-      containers:
+      initContainers:
         - name: 0-data-preparation-network
-          image: {{ .Values.dockerContainers.dataPreparationNetwork }}
-          command: ["./run.sh", "data"]
+            image: {{ .Values.dockerContainers.dataPreparationNetwork }}
+            command: ["./run.sh", "data"]
+            volumeMounts:
+            - mountPath: /home/workdir/data
+              name: input-data-pv
+      containers:
+        - name: 0-data-preparation-traffic-counts
+          image: {{ .Values.dockerContainers.dataPreparationTrafficCounts }}
+          command: ["./run.sh", "data", "30"]
           volumeMounts:
           - mountPath: /home/workdir/data
             name: input-data-pv

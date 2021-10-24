@@ -7,6 +7,7 @@ from pandarallel import pandarallel
 from tqdm import tqdm
 from collections import defaultdict
 
+
 def sample_building(
     df: pd.DataFrame,  # facilities
     region: int,
@@ -21,71 +22,103 @@ def sample_building(
 
     return sample['id']
 
-def match_driver_passenger(
+
+def match_drivers_to_passengers(
     agents: pd.DataFrame,
     travels: pd.DataFrame
 ) -> pd.DataFrame:
     """
     Maches dirvers and passengers
-    Returns updated travels dataframe - passenger destinations are included in driver day schedule.
+    Returns updated travels dataframe - passenger destinations
+    are included in driver day schedule.
 
-    Parameters: 
+    Parameters:
         agents  : DataFrame
         travels : DataFrame
-    
+
     Returns:
         travels : DataFrame
 
     """
-    df_merged = pd.merge(travels, agents[["home_region", "home_building", "agent_id"]], on="agent_id", how="left")
-    df_merged["start_building"] = df_merged.groupby('agent_id')['dest_building'].shift()
-    df_merged["start_building"] = df_merged["start_building"].fillna(df_merged["home_building"])
+
+    def flatten(t):
+        return [item for sublist in t for item in sublist]
+
+    df_merged = pd.merge(
+        travels,
+        agents[["home_region", "home_building", "agent_id"]],
+        on="agent_id",
+        how="left"
+    )
+    df_merged["start_building"] = df_merged.groupby(
+        'agent_id'
+    )['dest_building'].shift()
+    df_merged["start_building"] = df_merged[
+        "start_building"
+    ].fillna(df_merged["home_building"])
 
     df_drivers = df_merged[df_merged['transport_mode'] == 'car']
     travels = df_merged[df_merged['transport_mode'] != 'car']
     df_passengers = df_merged[df_merged['transport_mode'] == 'car_passenger']
+
     drivers_map = defaultdict(list)
-    #dict key = (home_region, travel_start_time_hour)
+    # dict key = (home_region, travel_start_time_hour)
     for _, row in df_drivers.iterrows():
-        drivers_map[row['home_region'], row['travel_start_time'][0:2]].append(row.to_dict())
-    df_passengers = df_passengers.head(10)
-    for _, passenger in tqdm(df_passengers.iterrows(), total=df_passengers.shape[0]) :
+        drivers_map[
+            row['home_region'],
+            row['travel_start_time'][0:2]
+        ].append(row.to_dict())
+
+    travels_to_add = []
+    for passenger in tqdm(df_passengers.to_dict('records')):
         key = (passenger['home_region'], passenger['travel_start_time'][0:2])
+
         if key in drivers_map:
             possible_drivers = drivers_map.get(key)
-            #drivers = [driver for driver in possible_drivers if driver['travel_start_time_s'] < passenger['travel_start_time_s']]
-            driver = None
-            if len(possible_drivers) is not 0:
-                driver = possible_drivers[0]
-                possible_drivers.remove(driver)
+
+            if possible_drivers:
+                driver = possible_drivers.pop()
                 drivers_map[key] = possible_drivers
 
-            if driver is not None:
+                passenger_id = str(passenger['agent_id'])
+
                 # driver start -> passenger start
-                ds_ps = driver
+                ds_ps = driver.copy()
                 ds_ps['dest_region'] = passenger['start_region']
                 ds_ps['dest_building'] = passenger['start_building']
-                ds_ps['dest_place_type'] = 'stop'
-                travels = travels.append(ds_ps, ignore_index=True)
+                ds_ps['dest_place_type'] = 'take_passenger_' + passenger_id
+                ds_ps['dest_activity_dur_time_s'] = 300
+                ds_ps['dest_activity_dur_time'] = "00:05:00"
+                travels_to_add.append(ds_ps)
 
                 # passenger start -> passenger dest
-                ps_pd = passenger
-                ps_pd['agent_id'] = driver['agent_id']
-                ps_pd['dest_place_type'] = 'stop'
-                ps_pd['start_place_type'] = 'stop'
-                travels = travels.append(ps_pd, ignore_index=True)
+                ps_pd = driver.copy()
+                ps_pd['start_place_type'] = 'take_passenger_' + passenger_id
+                ps_pd['start_region'] = passenger['start_region']
+                ps_pd['start_building'] = passenger['start_building']
+                ps_pd['dest_place_type'] = 'drop_passenger_' + passenger_id
+                ps_pd['dest_region'] = passenger['dest_region']
+                ps_pd['dest_building'] = passenger['dest_building']
+                ps_pd['dest_activity_dur_time_s'] = 300
+                ps_pd['dest_activity_dur_time'] = "00:05:00"
+                travels_to_add.append(ps_pd)
 
                 # passenger dest -> driver dest
-                pd_dd = driver
+                pd_dd = driver.copy()
+                pd_dd['start_place_type'] = 'drop_passenger_' + passenger_id
                 pd_dd['start_region'] = passenger['dest_region']
                 pd_dd['start_building'] = passenger['dest_building']
-                pd_dd['start_place_type'] = 'stop'
-                travels = travels.append(ds_ps, ignore_index=True)
-    for value in tqdm(drivers_map.values()):
-        travels = travels.append(value)
-    #travels = travels.drop(["home_region", "home_building"])
-    return travels
+                travels_to_add.append(pd_dd)
 
+    travels = travels.append(travels_to_add, ignore_index=True)
+
+    travels_to_add = flatten(list(drivers_map.values()))
+    travels = travels.append(travels_to_add, ignore_index=True)
+    travels = travels.drop(columns=["home_region", "home_building"])
+    travels = travels.sort_values(['agent_id', 'travel_start_time'])
+    travels = travels.reset_index(drop=True)
+
+    return travels
 
 
 if __name__ == "__main__":
@@ -143,7 +176,7 @@ if __name__ == "__main__":
     agents.to_csv(out_agents_path, index=False)
 
     # travels
-    # travels = pd.read_csv(in_travels_path, index_col=0)
+    travels = pd.read_csv(in_travels_path, index_col=0)
     travels = travels.replace(config['travels_activities_mapping'])
     modes = config['travels_modes_mapping']
     travels['transport_mode'] = travels.progress_apply(
@@ -194,4 +227,10 @@ if __name__ == "__main__":
         ),
         axis=1
     )
+
+    travels = match_drivers_to_passengers(
+        agents=agents,
+        travels=travels
+    )
+
     travels.to_csv(out_travels_path, index=False)

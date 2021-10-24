@@ -184,4 +184,14 @@ if __name__ == "__main__":
         ),
         axis=1
     )
+    travels['dest_activity_dur_time_s'] = travels.progress_apply(
+        lambda row: row['dest_activity_dur_time'] * 60,
+        axis=1
+    )
+    travels['dest_activity_dur_time'] = travels.progress_apply(
+        lambda row: '{:02d}:{:02d}:00'.format(
+            *divmod(row['dest_activity_dur_time'], 60)
+        ),
+        axis=1
+    )
     travels.to_csv(out_travels_path, index=False)

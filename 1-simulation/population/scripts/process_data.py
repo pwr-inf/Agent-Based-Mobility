@@ -63,11 +63,11 @@ def match_drivers_to_passengers(
 
     drivers_map = defaultdict(list)
     # dict key = (home_region, travel_start_time_hour)
-    for _, row in df_drivers.iterrows():
+    for row in df_drivers.to_dict('records'):
         drivers_map[
             row['home_region'],
             row['travel_start_time'][0:2]
-        ].append(row.to_dict())
+        ].append(row)
 
     travels_to_add = []
     for passenger in tqdm(df_passengers.to_dict('records')):
@@ -75,6 +75,11 @@ def match_drivers_to_passengers(
 
         if key in drivers_map:
             possible_drivers = drivers_map.get(key)
+            removed_drivers = []
+            for driver in possible_drivers:
+                if driver['agent_id'] == passenger['agent_id']:
+                    removed_drivers.append(driver)
+                    possible_drivers.remove(driver)
 
             if possible_drivers:
                 driver = possible_drivers.pop()
@@ -109,6 +114,9 @@ def match_drivers_to_passengers(
                 pd_dd['start_region'] = passenger['dest_region']
                 pd_dd['start_building'] = passenger['dest_building']
                 travels_to_add.append(pd_dd)
+
+        if removed_drivers:
+            possible_drivers.extend(removed_drivers)
 
     travels = travels.append(travels_to_add, ignore_index=True)
 

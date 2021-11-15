@@ -91,17 +91,17 @@ def match_drivers_to_passengers(
                 ds_ps = driver.copy()
                 ds_ps['dest_region'] = passenger['start_region']
                 ds_ps['dest_building'] = passenger['start_building']
-                ds_ps['dest_place_type'] = 'take_passenger_' + passenger_id
+                ds_ps['dest_place_type'] = 'take_passenger'
                 ds_ps['dest_activity_dur_time_s'] = 300
                 ds_ps['dest_activity_dur_time'] = "00:05:00"
                 travels_to_add.append(ds_ps)
 
                 # passenger start -> passenger dest
                 ps_pd = driver.copy()
-                ps_pd['start_place_type'] = 'take_passenger_' + passenger_id
+                ps_pd['start_place_type'] = 'take_passenger'
                 ps_pd['start_region'] = passenger['start_region']
                 ps_pd['start_building'] = passenger['start_building']
-                ps_pd['dest_place_type'] = 'drop_passenger_' + passenger_id
+                ps_pd['dest_place_type'] = 'drop_passenger'
                 ps_pd['dest_region'] = passenger['dest_region']
                 ps_pd['dest_building'] = passenger['dest_building']
                 ps_pd['dest_activity_dur_time_s'] = 300
@@ -110,13 +110,13 @@ def match_drivers_to_passengers(
 
                 # passenger dest -> driver dest
                 pd_dd = driver.copy()
-                pd_dd['start_place_type'] = 'drop_passenger_' + passenger_id
+                pd_dd['start_place_type'] = 'drop_passenger'
                 pd_dd['start_region'] = passenger['dest_region']
                 pd_dd['start_building'] = passenger['dest_building']
                 travels_to_add.append(pd_dd)
 
-        if removed_drivers:
-            possible_drivers.extend(removed_drivers)
+            if removed_drivers:
+                possible_drivers.extend(removed_drivers)
 
     travels = travels.append(travels_to_add, ignore_index=True)
 

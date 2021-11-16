@@ -198,6 +198,18 @@
 				<param name="typicalDuration" value="00:10:00" />
 				<param name="minimalDuration" value="00:5:00" />
 			</parameterset>
+			<parameterset type="activityParams">
+				<param name="activityType"    value="take_passenger" />
+				<param name="priority"        value="2" />
+				<param name="typicalDuration" value="00:00:30" />
+				<param name="minimalDuration" value="00:00:10" />
+			</parameterset>
+			<parameterset type="activityParams">
+				<param name="activityType"    value="drop_passenger" />
+				<param name="priority"        value="2" />
+				<param name="typicalDuration" value="00:00:30" />
+				<param name="minimalDuration" value="00:00:10" />
+			</parameterset>
 		</parameterset>
 	</module>
 	

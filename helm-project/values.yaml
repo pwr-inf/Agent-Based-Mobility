@@ -20,7 +20,7 @@ dataPreparation: false
 
 simulation:
   populationSize: '600000'
-  simulatorsInstances: 2
+  simulatorsInstances: 1
   simulationsNumberPerInstance: 10
 
 postProcessing:

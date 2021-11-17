@@ -20,6 +20,7 @@ dataPreparation: false
 
 simulation:
   populationSize: '600000'
+  pandarallelWorkers: '8'
   simulatorsInstances: 1
   simulationsNumberPerInstance: 10
 

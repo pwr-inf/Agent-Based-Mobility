@@ -21,7 +21,10 @@ spec:
             name: populations-pv
         - name: 1-simulation-population
           image: {{ .Values.dockerContainers.simulationPopulation }}
-          command: ['./run.sh', 'data', 'populations', 'sim1']
+          command: [
+            './run.sh', 'data', 'populations', 'sim1',
+            '{{ .Values.simulation.pandarallelWorkers }}'
+          ]
           volumeMounts:
           - mountPath: /home/workdir/data
             name: input-data-pv

@@ -1,11 +1,12 @@
 import json
+import os
 import sys
+from collections import defaultdict
 from typing import Set
 
 import pandas as pd
 from pandarallel import pandarallel
 from tqdm import tqdm
-from collections import defaultdict
 
 
 def sample_building(
@@ -144,9 +145,11 @@ if __name__ == "__main__":
 
     tqdm.pandas()
     if workers_num > 1:
+        os.environ['JOBLIB_TEMP_FOLDER'] = '/tmp'
         pandarallel.initialize(
             nb_workers=workers_num,
-            progress_bar=True
+            progress_bar=True,
+            use_memory_fs=False
         )
 
     # config

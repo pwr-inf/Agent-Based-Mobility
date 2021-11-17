@@ -1,1 +1,1 @@
-minikube start --cpus=4 --memory='8000' --mount --mount-string="/home/kornel/Projects/Agent-Based-Mobility/local-volumes/:/local-volumes/"
+minikube start --cpus=8 --memory='12000' --mount --mount-string="/home/kornel/Projects/Agent-Based-Mobility/local-volumes/:/local-volumes/"

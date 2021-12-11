@@ -14,8 +14,10 @@ RUN pip install -e genet/.
 RUN pip install -r requirements.txt
 
 COPY ./scripts/. .
-COPY ./run.sh .
-RUN chmod +rx ./run.sh
+COPY ./process.sh .
+COPY ./rename_scenario.sh .
+RUN chmod +rx ./process.sh
+RUN chmod +rx ./rename_scenario.sh
 
 RUN mkdir scenarios
 RUN mkdir input_data

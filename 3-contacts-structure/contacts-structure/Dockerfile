@@ -1,4 +1,4 @@
-FROM kornelro/contacts-structure
+FROM kornelro/contacts-structure:latest
 
 WORKDIR /home/workdir
 

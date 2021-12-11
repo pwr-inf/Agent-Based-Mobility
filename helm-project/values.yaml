@@ -15,15 +15,15 @@ dockerContainers:
   simulationPopulation: kornelro/abm-1-simulation-population
   simulationTrafficModel: kornelro/abm-1-simulation-traffic-model
   postProcessing: kornelro/abm-2-post-processing
-  contactsStructureContactsStructure: kornelro/abm-3-contacts-structure
+  contactsStructureContactsStructure: kornelro/abm-3-contacts-structure-contacts-structure
 
 dataPreparation: false
 
 simulation:
-  populationSize: '600000'
+  populationSize: '10000'
   pandarallelWorkers: '8'
   simulatorsInstances: 1
-  simulationsNumberPerInstance: 10
+  simulationsNumberPerInstance: 1
 
 postProcessing:
   postProcessing: false

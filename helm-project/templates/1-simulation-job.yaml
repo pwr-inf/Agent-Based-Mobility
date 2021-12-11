@@ -40,15 +40,49 @@ spec:
             name: populations-pv
           - mountPath: /home/workdir/scenarios
             name: scenarios-pv
-      containers:
+        {{- if .Values.postProcessing.postProcessing }}
         - name: 2-post-processing
           image: {{ .Values.dockerContainers.postProcessing }}
-          command: ['./run.sh', 'scenarios', 'sim1', '{{ .Values.postProcessing.hexSize }}', 'input_data']
+          command: ['./process.sh', 'scenarios', 'sim1', '{{ .Values.postProcessing.hexSize }}', 'input_data']
           volumeMounts:
           - mountPath: /home/workdir/scenarios
             name: scenarios-pv
           - mountPath: /home/workdir/input_data
             name: input-data-pv
+        {{- end }}
+        {{- if .Values.contactsStructure }}
+        - name: 3-contacts-structure-contacts-structure
+          image: {{ .Values.dockerContainers.contactsStructureContactsStructure }}
+          command: ['./process_structure.sh', 'scenarios', 'sim1']
+          volumeMounts:
+          - mountPath: /home/workdir/scenarios
+            name: scenarios-pv
+          env:
+            - name: MONGO_USER
+              value: root
+            - name: MONGO_PASSWORD
+              value: cbacba
+            - name: MONGO_HOST
+              value: {{ .Release.Name }}-mongodb.default.svc.cluster.local
+            - name: MONGO_PORT
+              value: 27017
+            - name: MONGO_DB_NAME
+              value: cs
+            - name: MONGO_COLLECTION_NAME
+              value: sim1
+            - name: MONGO_BUFFOR_SIZE
+              value: 5000
+        {{- end }}
+      containers:
+        - name: 2-post-processing
+          image: {{ .Values.dockerContainers.postProcessing }}
+          command: ['./rename_sceanrio.sh', 'scenarios']
+          volumeMounts:
+          - mountPath: /home/workdir/scenarios
+            name: scenarios-pv
+          - mountPath: /home/workdir/input_data
+            name: input-data-pv
+        
       volumes:
       - name: input-data-pv
         persistentVolumeClaim:

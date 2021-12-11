@@ -31,3 +31,7 @@ docker push $HOST/abm-1-simulation-traffic-model:latest
 docker build -t abm-2-post-processing 2-post-processing/.
 docker tag abm-2-post-processing $HOST/abm-2-post-processing:latest
 docker push $HOST/abm-2-post-processing:latest
+
+docker build -t abm-3-contacts-structure-contacts-structure 3-contacts-structure/contacts-structure/.
+docker tag abm-3-contacts-structure-contacts-structure $HOST/abm-3-contacts-structure-contacts-structure:latest
+docker push $HOST/abm-3-contacts-structure-contacts-structure:latest

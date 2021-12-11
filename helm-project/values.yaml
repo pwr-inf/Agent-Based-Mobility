@@ -15,6 +15,7 @@ dockerContainers:
   simulationPopulation: kornelro/abm-1-simulation-population
   simulationTrafficModel: kornelro/abm-1-simulation-traffic-model
   postProcessing: kornelro/abm-2-post-processing
+  contactsStructureContactsStructure: kornelro/abm-3-contacts-structure
 
 dataPreparation: false
 
@@ -25,4 +26,12 @@ simulation:
   simulationsNumberPerInstance: 10
 
 postProcessing:
+  postProcessing: false
   hexSize: '9'
+
+contactsStructure: true
+
+mongodb:
+  auth:
+    rootPassword: cbacba
+    password: cbacba

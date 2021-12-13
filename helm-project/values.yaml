@@ -16,6 +16,7 @@ dockerContainers:
   simulationTrafficModel: kornelro/abm-1-simulation-traffic-model
   postProcessing: kornelro/abm-2-post-processing
   contactsStructureContactsStructure: kornelro/abm-3-contacts-structure-contacts-structure
+  contactsStructurePostProcessing: kornelro/abm-3-contacts-structure-post-processing
 
 dataPreparation: false
 
@@ -26,7 +27,7 @@ simulation:
   simulationsNumberPerInstance: 1
 
 postProcessing:
-  postProcessing: false
+  postProcessing: true
   hexSize: '9'
 
 contactsStructure: true

@@ -1,6 +1,6 @@
 import collections
-import json
 import os
+import pickle
 import sys
 from collections import Counter, defaultdict
 from copy import deepcopy
@@ -180,6 +180,7 @@ if __name__ == "__main__":
         interactions_by_age_by_type_by_agent[agent_1_age][activities[0]][document['agent_1_id']] += 1
         interactions_by_age_by_type_by_agent[agent_2_age][activities[1]][document['agent_2_id']] += 1
 
+    mongo_collection.drop()
     myclient.close()
 
     output = {}
@@ -191,10 +192,13 @@ if __name__ == "__main__":
     degrees = ug.get_total_degrees(list(ug.vertices()))
     active_nodes = ug.new_vertex_property('bool')
     for i in range(population):
-        if degrees[i] > 0:
-            active_nodes[i] = True
-        else:
-            active_nodes[i] = False
+        try:
+            if degrees[i] > 0:
+                active_nodes[i] = True
+            else:
+                active_nodes[i] = False
+        except IndexError:
+            pass
 
     sub_ug = GraphView(ug, vfilt=active_nodes)
 
@@ -501,6 +505,6 @@ if __name__ == "__main__":
 
         output['interactions_by_region_by_agent'][region] = degrees
 
-    out_path = os.path.join(scenario_path, 'cs_out.json')
-    with open (out_path, 'w') as f:
-        json.dump(output, f)
+    out_path = os.path.join(scenario_path, 'cs_out.pickle')
+    with open(out_path, 'wb') as f:
+        pickle.dump(output, f)

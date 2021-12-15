@@ -451,7 +451,7 @@ if __name__ == "__main__":
                 d[age].append(values[age])
 
         for key, value in d.items():
-            output['age_age'][age_group] = value
+            output['age_age'][age_group][key] = value
 
 
     plot_age_age('6-15')

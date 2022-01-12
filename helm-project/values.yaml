@@ -21,7 +21,7 @@ dockerContainers:
 dataPreparation: false
 
 simulation:
-  populationSize: '10000'
+  populationSize: '600'
   pandarallelWorkers: '8'
   simulatorsInstances: 1
   simulationsNumberPerInstance: 1
@@ -30,7 +30,7 @@ postProcessing:
   postProcessing: true
   hexSize: '9'
 
-contactsStructure: true
+contactsStructure: false
 
 mongodb:
   auth:

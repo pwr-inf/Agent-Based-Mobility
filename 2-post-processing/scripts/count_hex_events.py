@@ -50,7 +50,7 @@ def get_links_hexes(
     nodes = net.nodes
     nodes_coord = dict(zip(nodes['node_id'], zip(nodes['x'], nodes['y'])))
     links = net.links
-    links['geometry'] = links.progress_apply(
+    links['geometry'] = links.apply(
         lambda row: LineString(
             [
                 nodes_coord[row['from_node']],
@@ -83,7 +83,7 @@ def get_links_hexes(
 
         return row
 
-    links = links.progress_apply(_add_hexes, axis=1)
+    links = links.apply(_add_hexes, axis=1)
     link_hexes = dict(zip(links['link_id'], links['hexes']))
 
     return link_hexes
@@ -95,14 +95,14 @@ def get_facilitie_hexes(
 ) -> Dict[str, str]:
 
     facilities = pd.read_csv(scenario_path+'/facilities.csv')
-    facilities['geometry'] = facilities.progress_apply(
+    facilities['geometry'] = facilities.apply(
         lambda row: Point(row['x'], row['y']),
         axis=1
     )
     facilities = gpd.GeoDataFrame(facilities)
     facilities.crs = "EPSG:2177"
     facilities = facilities.to_crs('EPSG:4327')
-    facilities['hex'] = facilities.progress_apply(
+    facilities['hex'] = facilities.apply(
         lambda row: h3.geo_to_h3(
             row['geometry'].y,
             row['geometry'].x,
@@ -204,7 +204,7 @@ if __name__ == '__main__':
         )
         return Polygon(points)
 
-    events['geometry'] = events.progress_apply(
+    events['geometry'] = events.apply(
         _add_hex_geometry,
         axis=1
     )

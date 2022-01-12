@@ -17,6 +17,5 @@ INPUT_DATA_PATH=$4
 echo "Processing vehicles to csv..."
 python genet_veh_to_csv.py $SCENARIOS_PATH $SCENARIO_NAME
 
-# not working!
 # echo "Processing count hex events..."
 # python count_hex_events.py $SCENARIOS_PATH $SCENARIO_NAME $HEX_SIZE

@@ -5,11 +5,11 @@ SCENARIO_NAME=$2
 HEX_SIZE=$3
 INPUT_DATA_PATH=$4
 
-# echo "Processing genet standard output..."
-# python genet_standard_output.py  $SCENARIOS_PATH $SCENARIO_NAME
+echo "Processing genet standard output..."
+python genet_standard_output.py  $SCENARIOS_PATH $SCENARIO_NAME
 
-# echo "Processing network counts..."
-# python counts_network.py $SCENARIOS_PATH $SCENARIO_NAME
+echo "Processing network counts..."
+python counts_network.py $SCENARIOS_PATH $SCENARIO_NAME
 
 # echo "Processing points counts..."
 # python counts_points.py $INPUT_DATA_PATH $SCENARIOS_PATH $SCENARIO_NAME \
